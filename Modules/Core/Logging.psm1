@@ -1,0 +1,1 @@
+function Write-Info {param([string]$Message) Write-Host $Message}
