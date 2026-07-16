@@ -11,8 +11,8 @@ Describe "SystemCheck - Start-SystemCheck" {
     Context "wenn alle Voraussetzungen erfüllt sind" {
 
         BeforeEach {
-            Mock Test-IsAdministrator { $true }
-            Mock Get-WindowsRelease {
+            Mock Test-IsAdministrator { $true } -ModuleName SystemCheck
+            Mock Get-WindowsRelease -ModuleName SystemCheck {
                 [PSCustomObject]@{
                     ProductName    = 'Windows 11 Enterprise'
                     DisplayVersion = '24H2'
@@ -31,8 +31,8 @@ Describe "SystemCheck - Start-SystemCheck" {
     Context "wenn Administratorrechte fehlen" {
 
         BeforeEach {
-            Mock Test-IsAdministrator { $false }
-            Mock Get-WindowsRelease {
+            Mock Test-IsAdministrator { $false } -ModuleName SystemCheck
+            Mock Get-WindowsRelease -ModuleName SystemCheck {
                 [PSCustomObject]@{
                     ProductName    = 'Windows 11 Enterprise'
                     DisplayVersion = '24H2'
@@ -51,8 +51,8 @@ Describe "SystemCheck - Start-SystemCheck" {
     Context "wenn eine nicht unterstützte Edition erkannt wird" {
 
         BeforeEach {
-            Mock Test-IsAdministrator { $true }
-            Mock Get-WindowsRelease {
+            Mock Test-IsAdministrator { $true } -ModuleName SystemCheck
+            Mock Get-WindowsRelease -ModuleName SystemCheck {
                 [PSCustomObject]@{
                     ProductName    = 'Windows 11 Home'
                     DisplayVersion = '24H2'

@@ -16,7 +16,7 @@ Describe "Compatibility - Get-WindowsRelease" {
     }
 
     It "fällt bei fehlendem Registry-Zugriff auf 'Unknown' zurück, statt zu werfen" {
-        Mock Get-ItemProperty { throw "Registry nicht verfügbar (Testumgebung)" }
+        Mock Get-ItemProperty { throw "Registry nicht verfügbar (Testumgebung)" } -ModuleName Compatibility
 
         { Get-WindowsRelease } | Should -Not -Throw
 
