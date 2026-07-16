@@ -1,0 +1,23 @@
+[
+  { "Domain": "login.microsoftonline.com",              "Category": "MicrosoftLogin",  "Description": "Azure AD / Microsoft-Konto-Authentifizierung" },
+  { "Domain": "login.live.com",                          "Category": "MicrosoftLogin",  "Description": "Microsoft-Konto-Login (Legacy-Endpunkt)" },
+  { "Domain": "login.windows.net",                       "Category": "MicrosoftLogin",  "Description": "Azure AD-Authentifizierung" },
+  { "Domain": "account.microsoft.com",                   "Category": "MicrosoftLogin",  "Description": "Microsoft-Kontoverwaltung" },
+  { "Domain": "login.microsoft.com",                     "Category": "MicrosoftLogin",  "Description": "Microsoft-Login-Redirect" },
+
+  { "Domain": "windowsupdate.microsoft.com",             "Category": "WindowsUpdate",   "Description": "Windows Update Katalog/Metadaten" },
+  { "Domain": "update.microsoft.com",                    "Category": "WindowsUpdate",   "Description": "Windows Update Kernservice" },
+  { "Domain": "download.windowsupdate.com",              "Category": "WindowsUpdate",   "Description": "Auslieferung von Update-Paketen" },
+  { "Domain": "download.microsoft.com",                  "Category": "WindowsUpdate",   "Description": "Allgemeine Microsoft-Downloadinfrastruktur" },
+  { "Domain": "au.download.windowsupdate.com",           "Category": "WindowsUpdate",   "Description": "Automatische Update-Auslieferung" },
+  { "Domain": "delivery.mp.microsoft.com",               "Category": "WindowsUpdate",   "Description": "Delivery Optimization (P2P-Updateverteilung)" },
+  { "Domain": "geo-prod.do.dsp.mp.microsoft.com",        "Category": "WindowsUpdate",   "Description": "Delivery Optimization Geo-Routing" },
+  { "Domain": "tsfe.trafficshaping.dsp.mp.microsoft.com","Category": "WindowsUpdate",   "Description": "Delivery Optimization Traffic Shaping" },
+
+  { "Domain": "cdn.winget.microsoft.com",                "Category": "Winget",          "Description": "Winget-Paketquelle (CDN)" },
+  { "Domain": "winget.azureedge.net",                    "Category": "Winget",          "Description": "Winget-Paketquelle (Azure CDN, ältere Auslieferung)" },
+  { "Domain": "displaycatalog.mp.microsoft.com",         "Category": "Winget",          "Description": "Store/Winget-Produktkatalog" },
+  { "Domain": "storeedgefd.dsx.mp.microsoft.com",        "Category": "Store",           "Description": "Microsoft Store Frontdoor / App-Auslieferung" },
+  { "Domain": "purchase.mp.microsoft.com",               "Category": "Store",           "Description": "Store-Kauf-/Lizenzabwicklung" },
+  { "Domain": "licensing.mp.microsoft.com",               "Category": "Store",           "Description": "Store-App-Lizenzprüfung" }
+]
