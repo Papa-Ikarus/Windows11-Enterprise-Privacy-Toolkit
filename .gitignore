@@ -1,14 +1,35 @@
+# ============================================
+# Windows11 Enterprise Privacy Toolkit
+# ============================================
+
 # Logs
 Logs/
-
-# Backups
-Backup/
 
 # Reports
 Reports/
 
-# PowerShell cache
+# Backups
+Backup/
+
+# Temporary files
+*.tmp
+*.bak
+
+# PowerShell
 *.psd1.cache
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Environment
+.env
+.env.*
+
+# Aider
+.aider*
+.aider/
 
 # VS Code
 .vscode/
@@ -19,9 +40,3 @@ Reports/
 # Windows
 Thumbs.db
 Desktop.ini
-
-# Aider AI Coding Tool
-.aider.chat.history.md
-.aider.input.history
-.aider.tags.cache.v4/
-.aider*
