@@ -19,3 +19,9 @@ Reports/
 # Windows
 Thumbs.db
 Desktop.ini
+
+# Aider AI Coding Tool
+.aider.chat.history.md
+.aider.input.history
+.aider.tags.cache.v4/
+.aider*
