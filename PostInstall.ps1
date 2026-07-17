@@ -1,2 +1,3 @@
-# PostInstall.ps1
+# Compatibility wrapper
+
 & "$PSScriptRoot\Bootstrap.ps1"
