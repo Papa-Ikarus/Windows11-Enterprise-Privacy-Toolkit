@@ -16,12 +16,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Pester
-        shell: pwsh
+        shell: powershell
         run: |
           Install-Module -Name Pester -MinimumVersion 5.5.0 -Force -SkipPublisherCheck -Scope CurrentUser
 
       - name: Run Pester tests
-        shell: pwsh
+        shell: powershell
         run: |
           $config = New-PesterConfiguration
           $config.Run.Path = "Tests"
