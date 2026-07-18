@@ -32,7 +32,7 @@ function Get-TelemetryEndpoints {
     $Endpoints = Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json
 
     if ($Category) {
-        $Endpoints = $Endpoints | Where-Object { $_.Category -eq $Category }
+        $Endpoints = @($Endpoints | Where-Object { $_.Category -eq $Category })
     }
 
     return $Endpoints
@@ -68,7 +68,7 @@ function Get-EssentialEndpoints {
     $Endpoints = Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json
 
     if ($Category) {
-        $Endpoints = $Endpoints | Where-Object { $_.Category -eq $Category }
+        $Endpoints = @($Endpoints | Where-Object { $_.Category -eq $Category })
     }
 
     return $Endpoints
@@ -105,7 +105,7 @@ function Test-TelemetryWhitelistConflict {
     $TelemetryDomains = (Get-TelemetryEndpoints @TelemetryParams).Domain
     $EssentialDomains = (Get-EssentialEndpoints @EssentialParams).Domain
 
-    $Conflicts = $TelemetryDomains | Where-Object { $_ -in $EssentialDomains }
+    $Conflicts = @($TelemetryDomains | Where-Object { $_ -in $EssentialDomains })
 
     if ($Conflicts) {
         Write-ErrorLog "Whitelist-Konflikt: folgende Domains stehen sowohl auf der Telemetrie- als auch auf der Essential-Liste: $($Conflicts -join ', ')"
