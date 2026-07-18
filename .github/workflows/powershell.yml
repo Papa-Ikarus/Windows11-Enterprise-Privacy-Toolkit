@@ -23,6 +23,9 @@ jobs:
       - name: Run Pester tests
         shell: powershell
         run: |
+          Remove-Module Pester -ErrorAction SilentlyContinue
+          Import-Module Pester -MinimumVersion 5.5.0 -Force
+
           $config = New-PesterConfiguration
           $config.Run.Path = "Tests"
           $config.Run.Exit = $true
