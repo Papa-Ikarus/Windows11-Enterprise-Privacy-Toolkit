@@ -1,38 +1,121 @@
+# Windows11 Enterprise Privacy Toolkit
 # Architecture
 
-> Windows11 Enterprise Privacy Toolkit  
-> Architecture Documentation
-
-Version: 0.1.0-alpha
+Version: 1.0 (Draft)
 
 ---
 
 # Purpose
 
-The Windows11 Enterprise Privacy Toolkit is designed as a modular PowerShell framework for improving privacy on Windows 11 Enterprise.
+The Windows11 Enterprise Privacy Toolkit is a modular PowerShell framework designed to improve privacy on Windows 11 Enterprise while preserving core Microsoft functionality.
 
-The primary goal is to reduce telemetry while preserving essential Microsoft functionality.
+This project is **not** a Windows debloater.
 
-The toolkit is **not** a Windows debloater.
+Primary goals:
 
----
-
-# Design Goals
-
-The architecture follows these principles:
-
-- Modular
-- Enterprise-first
-- Safe
-- Reversible
-- Testable
-- Maintainable
-
-Every component should have a single responsibility.
+- Reduce telemetry
+- Preserve Windows Update
+- Preserve Microsoft Account functionality
+- Preserve Winget
+- Provide safe rollback
+- Remain maintainable over time
 
 ---
 
-# Project Layers
+# Design Principles
+
+The architecture follows six core principles.
+
+## 1. Safety First
+
+Every change must be reversible.
+
+No registry change is performed without backup support.
+
+---
+
+## 2. Modular Design
+
+Every module has one responsibility.
+
+Example:
+
+Core
+Logging
+Registry
+Firewall
+Privacy
+Profiles
+
+Modules should not depend on unrelated modules.
+
+---
+
+## 3. Enterprise First
+
+The toolkit is designed primarily for:
+
+- Windows 11 Enterprise
+- Enterprise IoT (planned)
+
+Consumer editions are not the primary target.
+
+---
+
+## 4. Backward Compatibility
+
+Whenever possible:
+
+- avoid breaking changes
+- preserve existing interfaces
+- maintain upgrade paths
+
+---
+
+## 5. Documentation First
+
+Architecture is documented before implementation.
+
+Documentation is considered part of the source code.
+
+---
+
+## 6. Testability
+
+Every public function should be testable.
+
+Business logic should be separated from user interaction.
+
+---
+
+# Repository Layout
+
+```
+Windows11-Enterprise-Privacy-Toolkit/
+
+.github/
+Config/
+Docs/
+Modules/
+Tests/
+
+Bootstrap.ps1
+PostInstall.ps1
+Restore.ps1
+
+README.md
+CHANGELOG.md
+LICENSE
+
+PROJECT_RULES.md
+AGENTS.md
+AIDER.md
+CLAUDE.md
+```
+
+---
+
+# High Level Architecture
 
 ```
 Bootstrap
@@ -47,10 +130,10 @@ Configuration
 Core Services
         │
         ├── Logging
-        ├── Backup
         ├── Registry
-        ├── Reporting
-        └── Compatibility
+        ├── Backup
+        ├── Compatibility
+        └── Reporting
         │
         ▼
 Feature Modules
@@ -64,36 +147,14 @@ Feature Modules
 
 ---
 
-# Repository Structure
+# Startup Sequence
 
-```
-Windows11-Enterprise-Privacy-Toolkit/
-
-.github/
-Docs/
-Tests/
-Config/
-Modules/
+The toolkit always starts with:
 
 Bootstrap.ps1
-PostInstall.ps1
-Restore.ps1
-README.md
-```
-
----
-
-# Startup Flow
-
-The toolkit always starts using:
-
-```
-Bootstrap.ps1
-```
 
 Execution flow:
 
-```
 Bootstrap
 
 ↓
@@ -102,7 +163,7 @@ Initialize
 
 ↓
 
-System Check
+Environment Checks
 
 ↓
 
@@ -118,18 +179,19 @@ Initialize Backup
 
 ↓
 
-Load Feature Modules
+Import Core Modules
 
 ↓
 
-Execute Requested Actions
+Import Feature Modules
+
+↓
+
+Execute Tasks
 
 ↓
 
 Generate Report
-```
-
-No module should execute independently without initialization.
 
 ---
 
@@ -137,12 +199,12 @@ No module should execute independently without initialization.
 
 ## Initialize
 
-Responsible for:
+Responsibilities:
 
 - Environment detection
 - Administrator verification
-- PowerShell version check
-- Windows edition check
+- PowerShell verification
+- Windows edition detection
 - Module loading
 
 ---
@@ -151,9 +213,7 @@ Responsible for:
 
 Provides centralized logging.
 
-Only this module may produce formatted user output.
-
-Other modules should use logging functions instead of Write-Host.
+Modules should never call Write-Host directly.
 
 ---
 
@@ -161,9 +221,7 @@ Other modules should use logging functions instead of Write-Host.
 
 Loads toolkit configuration.
 
-Supports multiple profiles.
-
-Future versions may include:
+Future profiles include:
 
 - Default
 - Enterprise
@@ -173,47 +231,49 @@ Future versions may include:
 
 ## Registry
 
-Provides a safe abstraction layer for registry access.
+Central registry abstraction.
 
-Every registry modification must support:
+Responsibilities:
 
+- Read
+- Write
 - Backup
-- Logging
+- Restore
 - Rollback
 
-Direct registry writes should be avoided.
+Direct registry access should be minimized.
 
 ---
 
 ## Backup
 
-Responsible for creating backups before modifications.
+Creates backups before modifications.
 
-Supported backup types:
+Supported:
 
 - Registry
+- Firewall Rules
 - Scheduled Tasks
 - Hosts File
-- Firewall Rules
 
 ---
 
 ## Compatibility
 
-Detects Windows version and supported features.
+Detects supported Windows builds.
 
-Supports:
+Initially supported:
 
-- Windows 11 Enterprise 23H2
-- Windows 11 Enterprise 24H2
-- Windows 11 Enterprise 25H2
-- Windows 11 Enterprise 26H1
+- 23H2
+- 24H2
+- 25H2
+- 26H1
 
 ---
 
 # Feature Modules
 
-Feature modules implement individual functionality.
+Feature modules contain business logic.
 
 Examples:
 
@@ -231,106 +291,88 @@ Feature modules should never perform initialization.
 
 # Profiles
 
-Profiles define version-specific behavior.
+Profiles contain Windows version specific settings.
 
 Example:
 
-```
 Profiles/
 
 23H2/
+
 24H2/
+
 25H2/
+
 26H1/
-```
 
-Only supported settings should be applied.
-
----
-
-# Error Handling
-
-All public functions should use:
-
-- try/catch
-- meaningful exceptions
-- centralized logging
-
-Silent failures should be avoided.
+Future builds should require only a new profile instead of changes to the core.
 
 ---
 
 # Logging Strategy
 
-All modules report to Logging.psm1.
+Logging is centralized.
 
-Console output should be minimal.
-
-Future logging targets:
+Future outputs:
 
 - Console
 - File
 - JSON
-- Event Log
+- Windows Event Log
+
+---
+
+# Error Handling
+
+Public functions should:
+
+- use CmdletBinding()
+- use try/catch
+- produce meaningful errors
+- log failures
+
+Silent failures should be avoided.
 
 ---
 
 # Testing
 
-Every public function should have a Pester test.
+Testing uses Pester.
 
-Tests should be:
+Goals:
 
+- deterministic
 - isolated
 - repeatable
-- deterministic
 
-Mock external Windows commands whenever possible.
-
----
-
-# Git Workflow
-
-Development is organized into sprints.
-
-Each sprint must:
-
-- compile successfully
-- pass tests
-- update documentation
-- keep the repository functional
+Mock Windows APIs whenever possible.
 
 ---
 
-# Future Architecture
+# Security
 
-Planned modules:
+The project never stores:
 
-```
-Core
-Logging
-Configuration
-Registry
-Backup
-Compatibility
-Privacy
-Firewall
-Winget
-Reporting
-Profiles
-Telemetry
-```
+- passwords
+- API keys
+- access tokens
+- certificates
+
+Secrets belong in environment variables.
 
 ---
 
 # Long-Term Vision
 
-The toolkit should become a professional privacy management framework for Windows 11 Enterprise.
+The toolkit should evolve into a professional Windows privacy management framework.
 
-Primary objectives:
+Future development will focus on:
 
-- Reduce telemetry
-- Preserve Windows functionality
-- Ensure reversibility
-- Maintain compatibility across supported releases
-- Provide enterprise-grade documentation and testing
+- telemetry reduction
+- rollback safety
+- enterprise compatibility
+- modular architecture
+- automated testing
+- continuous integration
+
+Architecture should always evolve without sacrificing maintainability.
