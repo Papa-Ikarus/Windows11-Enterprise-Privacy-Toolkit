@@ -1,3 +1,15 @@
+# Aider Instructions
+
+Read PROJECT_RULES.md before making changes.
+
+Never bypass the documented architecture.
+
+Prefer modifying existing modules over creating duplicates.
+
+Keep commits small.
+
+Do not rewrite unrelated code.
+
 # Windows11 Enterprise Privacy Toolkit - Aider Instructions
 
 ## Project Goal
