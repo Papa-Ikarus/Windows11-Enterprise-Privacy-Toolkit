@@ -6,8 +6,8 @@
 
     # Kleine, isolierte Test-Konfigurationsdateien statt der echten
     # Config/*.json, damit die Tests unabhängig vom Datenstand sind.
-    $script:TelemetryConfig = Join-Path $TestDrive "TelemetryEndpoints.json"
-    $script:EssentialConfig = Join-Path $TestDrive "EssentialEndpoints.json"
+    $script:TelemetryConfig = Join-Path $TestDrive "TelemetryEndpoints-Unit_$(Get-Random).json"
+    $script:EssentialConfig = Join-Path $TestDrive "EssentialEndpoints-Unit_$(Get-Random).json"
 
     @'
 [

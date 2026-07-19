@@ -94,7 +94,7 @@ function Remove-TelemetryFirewallRules {
 
     foreach ($Rule in $Rules) {
         if ($PSCmdlet.ShouldProcess($Rule.DisplayName, "Firewall-Regel entfernen")) {
-            $Rule | Remove-NetFirewallRule
+            Remove-NetFirewallRule -DisplayName $Rule.DisplayName
             $RemovedCount++
         }
     }
