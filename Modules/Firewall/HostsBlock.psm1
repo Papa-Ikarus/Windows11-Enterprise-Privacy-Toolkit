@@ -56,7 +56,7 @@ function Add-TelemetryHostsEntries {
     if ($TelemetryConfigPath) { $EndpointParams['ConfigPath'] = $TelemetryConfigPath }
     $Endpoints = Get-TelemetryEndpoints @EndpointParams
 
-    $ExistingLines = Get-Content -Path $HostsFilePath
+    $ExistingLines = @(Get-Content -Path $HostsFilePath)
     $CleanLines = @(Remove-TelemetryMarkerBlock -Lines $ExistingLines)
 
     # Anhängende Leerzeilen abschneiden, damit wiederholte Läufe nicht
@@ -102,8 +102,8 @@ function Remove-TelemetryHostsEntries {
         throw "Hosts-Datei nicht gefunden: $HostsFilePath"
     }
 
-    $ExistingLines = Get-Content -Path $HostsFilePath
-    $CleanLines = Remove-TelemetryMarkerBlock -Lines $ExistingLines
+    $ExistingLines = @(Get-Content -Path $HostsFilePath)
+    $CleanLines = @(Remove-TelemetryMarkerBlock -Lines $ExistingLines)
 
     if ($CleanLines.Count -eq $ExistingLines.Count) {
         Write-Info "Keine PrivacyToolkit-Telemetrie-Einträge in der Hosts-Datei gefunden."
@@ -137,7 +137,7 @@ function Get-TelemetryHostsEntries {
         throw "Hosts-Datei nicht gefunden: $HostsFilePath"
     }
 
-    $Lines = Get-Content -Path $HostsFilePath
+    $Lines = @(Get-Content -Path $HostsFilePath)
     $InBlock = $false
     $Entries = New-Object System.Collections.Generic.List[object]
 

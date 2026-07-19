@@ -36,7 +36,7 @@ function Add-TelemetryFirewallRules {
         $RuleName = "$script:RulePrefix$($Endpoint.Domain)"
 
         try {
-            $ResolvedIPs = (Resolve-DnsName -Name $Endpoint.Domain -Type A -ErrorAction Stop).IPAddress
+            $ResolvedIPs = @((Resolve-DnsName -Name $Endpoint.Domain -Type A -ErrorAction Stop).IPAddress)
         }
         catch {
             Write-WarningLog "Konnte '$($Endpoint.Domain)' nicht auflösen, überspringe: $($_.Exception.Message)"

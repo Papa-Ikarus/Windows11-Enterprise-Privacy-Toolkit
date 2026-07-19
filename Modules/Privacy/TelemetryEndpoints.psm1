@@ -29,7 +29,7 @@ function Get-TelemetryEndpoints {
         throw "Telemetrie-Konfigurationsdatei nicht gefunden: $ConfigPath"
     }
 
-    $Endpoints = Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json
+    $Endpoints = @(Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json)
 
     if ($Category) {
         $Endpoints = @($Endpoints | Where-Object { $_.Category -eq $Category })
@@ -65,7 +65,7 @@ function Get-EssentialEndpoints {
         throw "Essential-Endpoints-Konfigurationsdatei nicht gefunden: $ConfigPath"
     }
 
-    $Endpoints = Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json
+    $Endpoints = @(Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json)
 
     if ($Category) {
         $Endpoints = @($Endpoints | Where-Object { $_.Category -eq $Category })
