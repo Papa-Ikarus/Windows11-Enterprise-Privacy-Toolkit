@@ -31,6 +31,11 @@ function Get-TelemetryEndpoints {
 
     $Endpoints = @(Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json)
 
+    Write-Info "DIAG: ConfigPath=$ConfigPath Category=[$Category] EndpointsCount=$($Endpoints.Count)"
+    foreach ($e in $Endpoints) {
+        Write-Info "DIAG: Domain=$($e.Domain) Category=[$($e.Category)] Match=$($e.Category -eq $Category)"
+    }
+
     if ($Category) {
         $Endpoints = @($Endpoints | Where-Object { $_.Category -eq $Category })
     }
