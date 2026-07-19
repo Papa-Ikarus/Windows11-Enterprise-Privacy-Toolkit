@@ -1,4 +1,4 @@
-BeforeAll {
+﻿BeforeAll {
     Import-Module (Join-Path $PSScriptRoot "..\Modules\Core\Logging.psm1") -Force
     Import-Module (Join-Path $PSScriptRoot "..\Modules\Privacy\TelemetryEndpoints.psm1") -Force
     Import-Module (Join-Path $PSScriptRoot "..\Modules\Firewall\FirewallRules.psm1") -Force

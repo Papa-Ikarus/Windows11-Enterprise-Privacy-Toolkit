@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Haupteinstiegspunkt des Windows11-Enterprise-Privacy-Toolkit.
 

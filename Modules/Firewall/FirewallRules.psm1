@@ -1,4 +1,4 @@
-Set-StrictMode -Version Latest
+﻿Set-StrictMode -Version Latest
 
 $script:RulePrefix = "PrivacyToolkit-Telemetry-"
 

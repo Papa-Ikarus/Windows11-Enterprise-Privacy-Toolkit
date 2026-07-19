@@ -1,4 +1,4 @@
-BeforeAll {
+﻿BeforeAll {
     Import-Module (Join-Path $PSScriptRoot "..\Modules\Core\Logging.psm1") -Force
     Import-Module (Join-Path $PSScriptRoot "..\Modules\Core\Compatibility.psm1") -Force
     Import-Module (Join-Path $PSScriptRoot "..\Modules\Core\SystemCheck.psm1") -Force

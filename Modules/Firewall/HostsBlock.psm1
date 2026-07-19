@@ -1,4 +1,4 @@
-Set-StrictMode -Version Latest
+﻿Set-StrictMode -Version Latest
 
 $script:MarkerStart = '# === PrivacyToolkit Telemetry Block START (NICHT MANUELL BEARBEITEN) ==='
 $script:MarkerEnd   = '# === PrivacyToolkit Telemetry Block END ==='
