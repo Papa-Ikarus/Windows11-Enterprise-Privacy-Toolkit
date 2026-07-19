@@ -29,12 +29,14 @@ function Get-TelemetryEndpoints {
         throw "Telemetrie-Konfigurationsdatei nicht gefunden: $ConfigPath"
     }
 
-    $Endpoints = @(Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json)
-
-    Write-Info "DIAG: ConfigPath=$ConfigPath Category=[$Category] EndpointsCount=$($Endpoints.Count)"
-    foreach ($e in $Endpoints) {
-        Write-Info "DIAG: Domain=$($e.Domain) Category=[$($e.Category)] Match=$($e.Category -eq $Category)"
-    }
+    # WICHTIG: ConvertFrom-Json gibt unter Windows PowerShell 5.1 ein
+    # JSON-Array als EIN nicht-aufgezähltes Pipeline-Objekt zurück.
+    # "@(cmd | ConvertFrom-Json)" wuerde das dadurch in ein
+    # verschachteltes 1-Element-Array einwickeln (Bug nur unter 5.1,
+    # unter PS7 unauffaellig). Deshalb zwingend zwei Schritte: erst
+    # zuweisen, DANN separat mit @() re-flatten.
+    $Endpoints = Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json
+    $Endpoints = @($Endpoints)
 
     if ($Category) {
         $Endpoints = @($Endpoints | Where-Object { $_.Category -eq $Category })
@@ -70,7 +72,10 @@ function Get-EssentialEndpoints {
         throw "Essential-Endpoints-Konfigurationsdatei nicht gefunden: $ConfigPath"
     }
 
-    $Endpoints = @(Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json)
+    # Siehe Kommentar in Get-TelemetryEndpoints: zwei Schritte wegen
+    # ConvertFrom-Json-Verhalten unter Windows PowerShell 5.1.
+    $Endpoints = Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json
+    $Endpoints = @($Endpoints)
 
     if ($Category) {
         $Endpoints = @($Endpoints | Where-Object { $_.Category -eq $Category })
