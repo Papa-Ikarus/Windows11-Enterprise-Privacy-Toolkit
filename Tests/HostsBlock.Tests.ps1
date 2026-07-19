@@ -1,11 +1,11 @@
-BeforeAll {
+﻿BeforeAll {
     Import-Module (Join-Path $PSScriptRoot "..\Modules\Core\Logging.psm1") -Force
     Import-Module (Join-Path $PSScriptRoot "..\Modules\Privacy\TelemetryEndpoints.psm1") -Force
     Import-Module (Join-Path $PSScriptRoot "..\Modules\Firewall\HostsBlock.psm1") -Force
 
     Initialize-Logger -LogDirectory (Join-Path $TestDrive "Logs")
 
-    $script:TelemetryConfig = Join-Path $TestDrive "TelemetryEndpoints.json"
+    $script:TelemetryConfig = Join-Path $TestDrive "TelemetryEndpoints-HostsBlock_$(Get-Random).json"
     @'
 [
   { "Domain": "vortex.data.microsoft.com", "Category": "Diagnostics", "Description": "Test" },

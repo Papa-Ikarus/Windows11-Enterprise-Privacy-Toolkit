@@ -1,4 +1,4 @@
-BeforeAll {
+﻿BeforeAll {
     $ModulePath = Join-Path $PSScriptRoot "..\Modules\Core\Compatibility.psm1"
     Import-Module $ModulePath -Force
 }

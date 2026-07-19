@@ -1,4 +1,4 @@
-BeforeAll {
+﻿BeforeAll {
     Import-Module (Join-Path $PSScriptRoot "..\Modules\Core\Logging.psm1") -Force
     Import-Module (Join-Path $PSScriptRoot "..\Modules\Privacy\TelemetryEndpoints.psm1") -Force
 
@@ -6,8 +6,8 @@ BeforeAll {
 
     # Kleine, isolierte Test-Konfigurationsdateien statt der echten
     # Config/*.json, damit die Tests unabhängig vom Datenstand sind.
-    $script:TelemetryConfig = Join-Path $TestDrive "TelemetryEndpoints.json"
-    $script:EssentialConfig = Join-Path $TestDrive "EssentialEndpoints.json"
+    $script:TelemetryConfig = Join-Path $TestDrive "TelemetryEndpoints-Unit_$(Get-Random).json"
+    $script:EssentialConfig = Join-Path $TestDrive "EssentialEndpoints-Unit_$(Get-Random).json"
 
     @'
 [

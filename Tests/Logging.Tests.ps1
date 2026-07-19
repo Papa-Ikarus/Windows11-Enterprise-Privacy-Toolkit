@@ -1,4 +1,4 @@
-BeforeAll {
+﻿BeforeAll {
     $ModulePath = Join-Path $PSScriptRoot "..\Modules\Core\Logging.psm1"
     Import-Module $ModulePath -Force
 }

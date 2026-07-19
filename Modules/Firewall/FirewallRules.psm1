@@ -1,4 +1,4 @@
-Set-StrictMode -Version Latest
+﻿Set-StrictMode -Version Latest
 
 $script:RulePrefix = "PrivacyToolkit-Telemetry-"
 
@@ -36,7 +36,7 @@ function Add-TelemetryFirewallRules {
         $RuleName = "$script:RulePrefix$($Endpoint.Domain)"
 
         try {
-            $ResolvedIPs = (Resolve-DnsName -Name $Endpoint.Domain -Type A -ErrorAction Stop).IPAddress
+            $ResolvedIPs = @((Resolve-DnsName -Name $Endpoint.Domain -Type A -ErrorAction Stop).IPAddress)
         }
         catch {
             Write-WarningLog "Konnte '$($Endpoint.Domain)' nicht auflösen, überspringe: $($_.Exception.Message)"
@@ -94,7 +94,7 @@ function Remove-TelemetryFirewallRules {
 
     foreach ($Rule in $Rules) {
         if ($PSCmdlet.ShouldProcess($Rule.DisplayName, "Firewall-Regel entfernen")) {
-            $Rule | Remove-NetFirewallRule
+            Remove-NetFirewallRule -DisplayName $Rule.DisplayName
             $RemovedCount++
         }
     }

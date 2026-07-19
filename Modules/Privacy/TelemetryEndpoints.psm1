@@ -1,4 +1,4 @@
-Set-StrictMode -Version Latest
+﻿Set-StrictMode -Version Latest
 
 function Get-TelemetryEndpoints {
     <#
@@ -29,13 +29,37 @@ function Get-TelemetryEndpoints {
         throw "Telemetrie-Konfigurationsdatei nicht gefunden: $ConfigPath"
     }
 
-    $Endpoints = Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json
+    # WICHTIG (Windows PowerShell 5.1): ConvertFrom-Json liefert ein
+    # JSON-Array als EIN nicht-aufgezähltes Pipeline-Objekt zurück,
+    # was in Kombination mit @() um eine Pipeline herum zu
+    # verschachtelten Arrays führen kann. Wir vermeiden das komplett,
+    # indem wir explizit mit dem foreach-Sprachkonstrukt iterieren
+    # (das ist von der Pipeline-"enumerate"-Eigenart unabhängig) statt
+    # mit Where-Object/Pipeline zu filtern.
+    $Parsed = Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json
 
-    if ($Category) {
-        $Endpoints = $Endpoints | Where-Object { $_.Category -eq $Category }
+    $AllEndpoints = New-Object System.Collections.Generic.List[object]
+    foreach ($Item in $Parsed) {
+        $AllEndpoints.Add($Item)
     }
 
-    return $Endpoints
+    if ($Category) {
+        $Filtered = New-Object System.Collections.Generic.List[object]
+        foreach ($Item in $AllEndpoints) {
+            if ($Item.Category -and ([string]$Item.Category).Trim() -ieq $Category.Trim()) {
+                $Filtered.Add($Item)
+            }
+        }
+        $ResultArray = $Filtered.ToArray()
+    }
+    else {
+        $ResultArray = $AllEndpoints.ToArray()
+    }
+
+    # Komma-Operator zwingend: verhindert, dass PowerShell ein leeres
+    # oder einelementiges Rückgabe-Array beim "return" in $null bzw.
+    # einen Skalar auflöst (klassische PowerShell-Falle).
+    return ,$ResultArray
 }
 
 function Get-EssentialEndpoints {
@@ -65,13 +89,28 @@ function Get-EssentialEndpoints {
         throw "Essential-Endpoints-Konfigurationsdatei nicht gefunden: $ConfigPath"
     }
 
-    $Endpoints = Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json
+    # Siehe ausführlicher Kommentar in Get-TelemetryEndpoints.
+    $Parsed = Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json
 
-    if ($Category) {
-        $Endpoints = $Endpoints | Where-Object { $_.Category -eq $Category }
+    $AllEndpoints = New-Object System.Collections.Generic.List[object]
+    foreach ($Item in $Parsed) {
+        $AllEndpoints.Add($Item)
     }
 
-    return $Endpoints
+    if ($Category) {
+        $Filtered = New-Object System.Collections.Generic.List[object]
+        foreach ($Item in $AllEndpoints) {
+            if ($Item.Category -and ([string]$Item.Category).Trim() -ieq $Category.Trim()) {
+                $Filtered.Add($Item)
+            }
+        }
+        $ResultArray = $Filtered.ToArray()
+    }
+    else {
+        $ResultArray = $AllEndpoints.ToArray()
+    }
+
+    return ,$ResultArray
 }
 
 function Test-TelemetryWhitelistConflict {
@@ -105,13 +144,19 @@ function Test-TelemetryWhitelistConflict {
     $TelemetryDomains = (Get-TelemetryEndpoints @TelemetryParams).Domain
     $EssentialDomains = (Get-EssentialEndpoints @EssentialParams).Domain
 
-    $Conflicts = $TelemetryDomains | Where-Object { $_ -in $EssentialDomains }
+    $ConflictList = New-Object System.Collections.Generic.List[string]
+    foreach ($Domain in $TelemetryDomains) {
+        if ($Domain -in $EssentialDomains) {
+            $ConflictList.Add($Domain)
+        }
+    }
+    $Conflicts = $ConflictList.ToArray()
 
-    if ($Conflicts) {
+    if ($Conflicts.Count -gt 0) {
         Write-ErrorLog "Whitelist-Konflikt: folgende Domains stehen sowohl auf der Telemetrie- als auch auf der Essential-Liste: $($Conflicts -join ', ')"
     }
 
-    return @($Conflicts)
+    return ,$Conflicts
 }
 
 Export-ModuleMember -Function Get-TelemetryEndpoints, Get-EssentialEndpoints, Test-TelemetryWhitelistConflict
