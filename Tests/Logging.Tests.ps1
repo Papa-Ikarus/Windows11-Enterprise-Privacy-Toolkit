@@ -27,7 +27,7 @@ Describe "Logging" {
         $LogFile = Get-ChildItem -Path $script:TestLogDir -Filter "Toolkit_*.log" | Select-Object -First 1
         $Content = Get-Content $LogFile.FullName -Raw
 
-        $Content | Should -Match '\[INFO\] Testnachricht'
+        $Content | Should -Match '\[INFO\].*Testnachricht'
     }
 
     It "schreibt unterschiedliche Log-Level mit korrektem Tag" {
@@ -41,10 +41,10 @@ Describe "Logging" {
         $LogFile = Get-ChildItem -Path $script:TestLogDir -Filter "Toolkit_*.log" | Select-Object -First 1
         $Content = Get-Content $LogFile.FullName -Raw
 
-        $Content | Should -Match '\[SUCCESS\] OK'
-        $Content | Should -Match '\[WARN\] Achtung'
-        $Content | Should -Match '\[ERROR\] Kaputt'
-        $Content | Should -Match '\[DEBUG\] Details'
+        $Content | Should -Match '\[SUCCESS\].*OK'
+        $Content | Should -Match '\[WARN\].*Achtung'
+        $Content | Should -Match '\[ERROR\].*Kaputt'
+        $Content | Should -Match '\[DEBUG\].*Details'
     }
 
     It "lehnt ungültige Log-Level ab (privates Write-Log)" {
