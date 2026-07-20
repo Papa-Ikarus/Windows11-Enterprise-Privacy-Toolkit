@@ -1,8 +1,12 @@
-# Coding Standards
+# Windows11 Enterprise Privacy Toolkit
 
-> Windows11 Enterprise Privacy Toolkit
+## Coding Standards
 
 Version: 1.0 (Draft)
+
+Last Updated: 2026-07-18
+
+Status: Draft
 
 ---
 
