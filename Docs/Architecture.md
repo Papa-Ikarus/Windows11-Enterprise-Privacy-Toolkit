@@ -1,7 +1,12 @@
 # Windows11 Enterprise Privacy Toolkit
-# Architecture
+
+## Architecture
 
 Version: 1.0 (Draft)
+
+Last Updated: 2026-07-18
+
+Status: Draft
 
 ---
 
