@@ -13,8 +13,11 @@ function Initialize-Logger {
 
     $script:LogFile = Join-Path $LogDirectory ("Toolkit_" + (Get-Date -Format "yyyyMMdd_HHmmss") + ".log")
 
-    # Mit explizitem UTF8 Encoding
-    New-Item -ItemType File -Path $script:LogFile -Force -Encoding UTF8 | Out-Null
+    # New-Item hat keinen -Encoding Parameter (nur Out-File/Set-Content/
+    # Add-Content haben den) - die Datei wird leer angelegt, die
+    # eigentliche UTF8-Kodierung passiert beim Schreiben in Write-Log
+    # ueber Add-Content -Encoding UTF8.
+    New-Item -ItemType File -Path $script:LogFile -Force | Out-Null
 
     Write-Info "Logger initialized."
 }
@@ -33,7 +36,6 @@ function Write-Log {
     $Line = "[$Timestamp] [$Level] $Message"
 
     if ($script:LogFile) {
-        # Explizites UTF8 + Force
         Add-Content -Path $script:LogFile -Value $Line -Encoding UTF8 -Force
     }
 
@@ -46,10 +48,29 @@ function Write-Log {
     }
 }
 
-function Write-Info       { param([string]$Message) { Write-Log -Level INFO    -Message $Message } }
-function Write-Success    { param([string]$Message) { Write-Log -Level SUCCESS -Message $Message } }
-function Write-WarningLog { param([string]$Message) { Write-Log -Level WARN    -Message $Message } }
-function Write-ErrorLog   { param([string]$Message) { Write-Log -Level ERROR   -Message $Message } }
-function Write-DebugLog   { param([string]$Message) { Write-Log -Level DEBUG   -Message $Message } }
+function Write-Info {
+    param([string]$Message)
+    Write-Log -Level INFO -Message $Message
+}
+
+function Write-Success {
+    param([string]$Message)
+    Write-Log -Level SUCCESS -Message $Message
+}
+
+function Write-WarningLog {
+    param([string]$Message)
+    Write-Log -Level WARN -Message $Message
+}
+
+function Write-ErrorLog {
+    param([string]$Message)
+    Write-Log -Level ERROR -Message $Message
+}
+
+function Write-DebugLog {
+    param([string]$Message)
+    Write-Log -Level DEBUG -Message $Message
+}
 
 Export-ModuleMember -Function Initialize-Logger, Write-Info, Write-Success, Write-WarningLog, Write-ErrorLog, Write-DebugLog

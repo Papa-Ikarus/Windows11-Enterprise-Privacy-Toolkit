@@ -163,21 +163,23 @@ Experimental features requiring newer PowerShell versions MUST be documented exp
 
 All text-based project files SHALL use:
 
-UTF-8 with BOM
+- UTF-8 with BOM
+- CRLF line endings
 
-This requirement exists to ensure full compatibility with Windows PowerShell 5.1.
+BOM is REQUIRED for all `.ps1`/`.psm1` files, not just "unless required".
 
-UTF-8 with BOM prevents problems involving:
+Reason: Windows PowerShell 5.1 does not reliably detect UTF-8 without
+a BOM. Files containing non-ASCII characters (e.g. German umlauts in
+comments or strings) get misread using the system ANSI codepage
+instead, which can silently corrupt string literals or even break
+parsing entirely (observed: a corrupted quote character inside a
+here-string caused a full parse failure, cascading into unrelated
+syntax errors reported at unrelated line numbers). PowerShell 7 does
+not have this problem, which is why this can pass local testing and
+still fail on the actual Windows PowerShell 5.1 target.
 
-- umlauts
-- Unicode characters
-- Comment-Based Help
-- Here-Strings
-- script parsing
-
-Files SHALL use consistent line endings.
-
-Trailing whitespace SHOULD be removed.
+All existing `.ps1`/`.psm1` files in this repository already have a
+BOM. Keep it when editing them, and add one to any new file.
 
 ---
 
