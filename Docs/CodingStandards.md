@@ -6,7 +6,7 @@ Version: 1.0
 
 Status: Stable
 
-Last Updated: 2026-07-21
+Last Updated: 2026-07-23
 
 ---
 
@@ -32,6 +32,19 @@ These standards apply equally to:
 - automated code generation tools
 
 Compliance with this document is mandatory.
+
+---
+
+# Relationship to Higher-Level Documentation
+
+This document defines the mandatory coding standards for the Windows11 Enterprise Privacy Toolkit.
+
+It SHALL be interpreted together with:
+
+- PROJECT_RULES.md
+- Architecture.md
+
+If conflicts occur, higher-level documentation SHALL take precedence.
 
 ---
 
@@ -156,6 +169,27 @@ Compatibility with newer PowerShell versions SHOULD be maintained whenever pract
 PowerShell-specific behavior SHALL be documented whenever compatibility differences exist.
 
 Experimental features requiring newer PowerShell versions MUST be documented explicitly.
+
+---
+
+# AI Coding Guidance
+
+Artificial Intelligence coding assistants SHALL comply with every requirement defined in this document.
+
+AI assistants SHOULD:
+
+- preserve existing coding style
+- reuse existing helper functions
+- avoid duplicate implementations
+- maintain module consistency
+- generate readable code
+
+AI assistants MUST NOT:
+
+- rewrite unrelated code
+- introduce inconsistent formatting
+- bypass architectural boundaries
+- ignore documented coding standards
 
 ---
 
@@ -978,67 +1012,48 @@ Every implementation should reduce technical debt whenever practical.
 
 ---
 
+# Technical Debt
+
+Technical debt SHOULD be minimized.
+
+Whenever existing code is modified:
+
+- readability SHOULD improve
+- maintainability SHOULD improve
+- duplication SHOULD decrease
+
+Large refactorings SHOULD remain separated from functional changes.
+
+---
+
 # Continuous Improvement
 
-Coding standards are expected to evolve.
+Coding standards evolve together with the project.
 
-Contributors are encouraged to improve:
+Changes SHOULD improve:
 
 - readability
-- maintainability
-- testing
-- documentation
-- automation
-- security
 - consistency
+- maintainability
+- reliability
 
-Suggestions SHOULD be documented through the project's decision process.
-
-Changes to this document SHOULD be reviewed before adoption.
-
----
-
-# References
-
-The following documents complement these coding standards:
-
-- PROJECT_RULES.md
-- Docs/Architecture.md
-- Docs/Development.md
-- Docs/ModuleGuide.md
-- Docs/ModuleLifecycle.md
-- Docs/Testing.md
-- Docs/QualityAssurance.md
-- Docs/DefinitionOfReady.md
-- Docs/DefinitionOfDone.md
-- Docs/ReviewChecklist.md
-- Docs/ReleaseChecklist.md
-- Docs/DecisionLog.md
-
-Contributors are expected to familiarize themselves with these documents before implementing significant changes.
-
----
-
-# Document Maintenance
-
-This document is maintained by the project maintainers.
-
-Changes SHALL:
-
-- preserve consistency
-- improve clarity
-- remain backwards compatible whenever practical
-- be documented in the Decision Log when significant
-
-Major revisions SHOULD be reviewed before becoming effective.
+Coding standards SHOULD remain stable but MAY evolve when justified.
 
 ---
 
 # Revision History
 
 | Version | Date | Description |
-|----------|------------|------------------------------------|
-| 1.0 | 2026-07-21 | Initial stable coding standards |
+|----------|------------|------------------------------|
+| 1.0 | 2026-07-23 | Initial stable coding standards |
+
+---
+
+# Final Statement
+
+These coding standards define the implementation quality expected throughout the Windows11 Enterprise Privacy Toolkit.
+
+Every contributor and AI coding assistant SHALL comply with these standards to ensure long-term maintainability, consistency and code quality.
 
 ---
 
