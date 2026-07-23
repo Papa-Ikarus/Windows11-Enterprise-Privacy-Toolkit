@@ -1,174 +1,305 @@
 # Windows11 Enterprise Privacy Toolkit
 
-## Architecture
+# Architecture
 
-Version: 1.0 (Draft)
+Version: 1.0
 
-Last Updated: 2026-07-18
+Status: Stable
 
-Status: Draft
+Last Updated: 2026-07-23
 
 ---
 
 # Purpose
 
-The Windows11 Enterprise Privacy Toolkit is a modular PowerShell framework designed to improve privacy on Windows 11 Enterprise while preserving core Microsoft functionality.
+This document defines the technical architecture of the Windows11 Enterprise Privacy Toolkit.
 
-This project is **not** a Windows debloater.
+It describes the structural organization of the project, the responsibilities of each architectural layer and the interaction between modules.
 
-Primary goals:
+The architecture is designed to ensure long-term maintainability, scalability, testability and security while preserving compatibility with supported Windows Enterprise editions.
 
-- Reduce telemetry
-- Preserve Windows Update
-- Preserve Microsoft Account functionality
-- Preserve Winget
-- Provide safe rollback
-- Remain maintainable over time
+This document intentionally focuses on architecture rather than implementation details.
+
+---
+
+# Scope
+
+This document applies to the complete repository including:
+
+- Core modules
+- Feature modules
+- Configuration
+- Profiles
+- Build scripts
+- Test infrastructure
+- Documentation structure
+
+Implementation details are intentionally documented elsewhere.
+
+---
+
+# Relationship to PROJECT_RULES
+
+PROJECT_RULES.md is the highest-level governance document of this project.
+
+This document defines the technical architecture that SHALL comply with the governance rules established in PROJECT_RULES.md.
+
+Whenever architectural decisions conflict with PROJECT_RULES.md, the requirements defined in PROJECT_RULES.md SHALL take precedence.
+
+Lower-level implementation details are defined in:
+
+- CodingStandards.md
+- PowerShellStyleGuide.md
+- PowerShellSecurity.md
+- Development.md
+- Testing.md
+
+---
+
+# Architecture Goals
+
+The architecture is designed to achieve the following objectives.
+
+## Stability
+
+Every modification SHOULD preserve overall system stability.
+
+The toolkit SHALL avoid unnecessary system modifications.
+
+---
+
+## Security
+
+Security considerations SHALL be integrated into every architectural decision.
+
+Modules SHOULD operate with the minimum privileges required.
+
+---
+
+## Maintainability
+
+The architecture SHALL encourage:
+
+- modularity
+- readability
+- low coupling
+- high cohesion
+
+Future maintenance SHOULD require minimal changes outside the affected module.
+
+---
+
+## Testability
+
+Every module SHOULD be independently testable.
+
+Business logic SHOULD remain separated from user interaction and platform-specific implementation whenever practical.
+
+---
+
+## Scalability
+
+The architecture SHALL support future expansion without requiring fundamental redesign.
+
+New functionality SHOULD integrate into existing architectural layers.
+
+---
+
+## Reproducibility
+
+Toolkit execution SHOULD remain deterministic.
+
+Repeated execution under identical conditions SHOULD produce predictable results.
 
 ---
 
 # Design Principles
 
-The architecture follows six core principles.
+The Windows11 Enterprise Privacy Toolkit follows the following architectural principles.
 
 ## 1. Safety First
 
-Every change must be reversible.
+Every system modification SHALL be reversible.
 
-No registry change is performed without backup support.
+No registry modification SHALL occur without backup support.
+
+Rollback capability is considered mandatory.
 
 ---
 
 ## 2. Modular Design
 
-Every module has one responsibility.
+Every module SHALL have exactly one clearly defined responsibility.
 
-Example:
+Modules SHOULD remain loosely coupled.
 
-Core
-Logging
-Registry
-Firewall
-Privacy
-Profiles
-
-Modules should not depend on unrelated modules.
+Reusable functionality SHALL be implemented inside Core modules.
 
 ---
 
 ## 3. Enterprise First
 
-The toolkit is designed primarily for:
+The toolkit is primarily designed for:
 
 - Windows 11 Enterprise
-- Enterprise IoT (planned)
+- Windows 11 Enterprise LTSC (future)
+- Windows 11 IoT Enterprise (planned)
 
-Consumer editions are not the primary target.
+Consumer editions are not the primary development target.
 
 ---
 
 ## 4. Backward Compatibility
 
-Whenever possible:
+Whenever practical:
 
-- avoid breaking changes
 - preserve existing interfaces
-- maintain upgrade paths
+- avoid breaking changes
+- maintain upgrade compatibility
+
+Architectural evolution SHOULD remain incremental.
 
 ---
 
 ## 5. Documentation First
 
-Architecture is documented before implementation.
+Architecture SHALL be documented before implementation.
 
 Documentation is considered part of the source code.
+
+Implementation SHALL remain consistent with documentation.
 
 ---
 
 ## 6. Testability
 
-Every public function should be testable.
+Every public component SHOULD support automated testing.
 
-Business logic should be separated from user interaction.
+Dependencies SHOULD remain mockable whenever practical.
+
+---
+
+## 7. Separation of Concerns
+
+Each architectural layer SHALL perform one responsibility only.
+
+Initialization, configuration, business logic and presentation SHALL remain separated.
 
 ---
 
 # Repository Layout
 
-```
+The repository follows a modular structure.
+
+```text
 Windows11-Enterprise-Privacy-Toolkit/
 
-.github/
-Config/
-Docs/
-Modules/
-Tests/
-
-Bootstrap.ps1
-PostInstall.ps1
-Restore.ps1
-
-README.md
-CHANGELOG.md
-LICENSE
-
-PROJECT_RULES.md
-AGENTS.md
-AIDER.md
-CLAUDE.md
+├── .github/
+│
+├── Config/
+│
+├── Docs/
+│
+├── Modules/
+│   ├── Core/
+│   ├── Privacy/
+│   ├── Utilities/
+│   └── Experimental/ (future)
+│
+├── Profiles/
+│
+├── Tests/
+│   ├── Unit/
+│   ├── Integration/
+│   ├── Regression/
+│   └── Performance/ (future)
+│
+├── Assets/
+│
+├── Templates/
+│
+├── Bootstrap.ps1
+├── PostInstall.ps1
+├── Restore.ps1
+│
+├── README.md
+├── CHANGELOG.md
+├── LICENSE
+│
+├── PROJECT_RULES.md
+├── AGENTS.md
+├── AIDER.md
+└── CLAUDE.md
 ```
+
+The repository structure SHALL remain stable over time.
+
+New top-level directories SHOULD only be introduced when architectural justification exists.
 
 ---
 
-# High Level Architecture
+---
 
+# High-Level Architecture
+
+The Windows11 Enterprise Privacy Toolkit follows a layered architecture.
+
+Each layer has a clearly defined responsibility and communicates only with adjacent layers whenever practical.
+
+```text
+                        User
+                          │
+                          ▼
+                    Bootstrap.ps1
+                          │
+                          ▼
+                 Environment Validation
+                          │
+                          ▼
+                   Configuration Loader
+                          │
+                          ▼
+                     Core Framework
+                          │
+      ┌───────────────────┼────────────────────┐
+      ▼                   ▼                    ▼
+   Logging             Backup              Validation
+      │                   │                    │
+      └───────────────┬───┴────────────────────┘
+                      ▼
+                Shared Services
+                      │
+      ┌───────────────┼────────────────────────────┐
+      ▼               ▼               ▼            ▼
+   Registry       Firewall       Services      Scheduled Tasks
+                      │
+                      ▼
+               Feature Modules
+                      │
+      ┌───────────────┼────────────────────────────┐
+      ▼               ▼               ▼            ▼
+ Privacy         Defender        OneDrive      Winget
+      │               │               │            │
+      └───────────────┴───────────────┴────────────┘
+                      │
+                      ▼
+                 Reporting Layer
 ```
-Bootstrap
-        │
-        ▼
-Initialization
-        │
-        ▼
-Configuration
-        │
-        ▼
-Core Services
-        │
-        ├── Logging
-        ├── Registry
-        ├── Backup
-        ├── Compatibility
-        └── Reporting
-        │
-        ▼
-Feature Modules
-        │
-        ├── Privacy
-        ├── Firewall
-        ├── Winget
-        ├── Profiles
-        └── Future Modules
-```
+
+The architecture intentionally separates infrastructure from business logic.
 
 ---
 
-# Startup Sequence
+# Execution Flow
 
-The toolkit always starts with:
+Toolkit execution SHALL follow the same sequence during every run.
 
-Bootstrap.ps1
-
-Execution flow:
-
+```text
 Bootstrap
 
 ↓
 
-Initialize
-
-↓
-
-Environment Checks
+Environment Validation
 
 ↓
 
@@ -184,33 +315,100 @@ Initialize Backup
 
 ↓
 
-Import Core Modules
+Load Core Modules
 
 ↓
 
-Import Feature Modules
+Load Feature Modules
 
 ↓
 
-Execute Tasks
+Execute Requested Tasks
 
 ↓
 
 Generate Report
 
+↓
+
+Exit
+```
+
+This execution order SHALL remain predictable.
+
+---
+
+# Architectural Layers
+
+The project is divided into several logical layers.
+
+---
+
+## Bootstrap Layer
+
+Responsibilities:
+
+- entry point
+- argument parsing
+- startup initialization
+- execution orchestration
+
+Bootstrap SHALL NOT contain business logic.
+
+---
+
+## Validation Layer
+
+Responsibilities:
+
+- Administrator verification
+- Windows edition detection
+- Windows build detection
+- PowerShell version checks
+- dependency validation
+- compatibility checks
+
+Execution SHALL stop if mandatory requirements are not met.
+
+---
+
+## Configuration Layer
+
+Responsibilities:
+
+- load configuration files
+- load profiles
+- validate configuration
+- apply defaults
+
+Configuration SHALL remain independent from implementation.
+
+---
+
+## Core Framework
+
+The Core Framework provides shared functionality for every module.
+
+Feature modules SHALL use Core services instead of implementing duplicate functionality.
+
+Core modules SHALL remain reusable.
+
 ---
 
 # Core Modules
 
+Every Core module has exactly one responsibility.
+
+---
+
 ## Initialize
 
-Responsibilities:
+Responsible for:
 
-- Environment detection
-- Administrator verification
-- PowerShell verification
-- Windows edition detection
-- Module loading
+- environment detection
+- dependency initialization
+- module loading
+- startup coordination
 
 ---
 
@@ -218,166 +416,395 @@ Responsibilities:
 
 Provides centralized logging.
 
-Modules should never call Write-Host directly.
+Responsibilities:
+
+- console logging
+- file logging
+- structured logging
+- future event log integration
+
+Modules SHALL NOT call Write-Host directly.
 
 ---
 
 ## Configuration
 
-Loads toolkit configuration.
+Responsibilities:
 
-Future profiles include:
+- configuration loading
+- profile selection
+- configuration validation
+- default values
 
-- Default
-- Enterprise
-- Developer
+Future configuration formats SHOULD remain backwards compatible.
 
 ---
 
 ## Registry
 
-Central registry abstraction.
+Provides a centralized registry abstraction.
 
 Responsibilities:
 
-- Read
-- Write
-- Backup
-- Restore
-- Rollback
+- read
+- write
+- backup
+- restore
+- rollback
 
-Direct registry access should be minimized.
+Direct registry access SHOULD remain limited to this module.
 
 ---
 
 ## Backup
 
-Creates backups before modifications.
+Responsible for creating backups before modifications.
 
-Supported:
+Supported backup targets include:
 
 - Registry
 - Firewall Rules
 - Scheduled Tasks
 - Hosts File
+- Configuration Files (future)
 
 ---
 
-## Compatibility
+## Rollback
 
-Detects supported Windows builds.
+Responsible for restoring previously created backups.
 
-Initially supported:
+Rollback SHALL support partial restoration whenever practical.
 
-- 23H2
-- 24H2
-- 25H2
-- 26H1
+Rollback functionality SHALL remain independent from feature modules.
+
+---
+
+## Validation
+
+Responsible for:
+
+- system validation
+- edition support
+- build support
+- dependency validation
+- administrator verification
+
+Validation SHALL occur before feature modules execute.
+
+---
+
+## Services
+
+Provides centralized service management.
+
+Responsibilities:
+
+- query services
+- configure startup types
+- enable services
+- disable services
+- restore original state
+
+---
+
+## ScheduledTasks
+
+Provides centralized scheduled task management.
+
+Responsibilities:
+
+- enumerate tasks
+- disable tasks
+- enable tasks
+- restore task state
+
+---
+
+## Firewall
+
+Provides centralized firewall operations.
+
+Responsibilities:
+
+- create rules
+- remove rules
+- backup rules
+- restore rules
+
+---
+
+## Utilities
+
+Contains reusable helper functionality shared across the project.
+
+Utilities SHALL remain independent from business logic.
 
 ---
 
 # Feature Modules
 
-Feature modules contain business logic.
+Feature modules contain project-specific business logic.
 
-Examples:
+Feature modules SHALL NEVER:
 
-Privacy
+- initialize the environment
+- perform logging initialization
+- create backups directly
+- access configuration files directly
 
-Firewall
+Instead they SHALL use the Core Framework.
 
-Winget
+---
 
-Profiles
+Planned feature modules include:
 
-Feature modules should never perform initialization.
+- Privacy
+- Defender
+- Firewall
+- Services
+- ScheduledTasks
+- OneDrive
+- Copilot
+- Widgets
+- Advertising
+- Diagnostics
+- Cloud
+- Winget
+- Profiles
+
+Additional modules MAY be added without changing the overall architecture.
+
+Feature modules SHALL remain independent whenever practical.
+
+---
 
 ---
 
 # Profiles
 
-Profiles contain Windows version specific settings.
+Profiles provide build-specific and edition-specific configuration.
 
-Example:
+The architecture separates implementation logic from operating system specific settings.
 
+Example profile structure:
+
+```text
 Profiles/
 
-23H2/
+├── Default/
+├── Enterprise/
+├── 23H2/
+├── 24H2/
+├── 25H2/
+├── 26H1/
+└── Future/
+```
 
-24H2/
+Profiles SHOULD only contain configuration and metadata.
 
-25H2/
+Profiles SHALL NOT contain business logic.
 
-26H1/
-
-Future builds should require only a new profile instead of changes to the core.
+Adding support for a new Windows build SHOULD primarily require a new profile instead of architectural changes.
 
 ---
 
 # Logging Strategy
 
-Logging is centralized.
+Logging is provided exclusively by the Core Logging module.
 
-Future outputs:
+Every module SHALL use the centralized logging interface.
+
+Supported logging targets include:
 
 - Console
-- File
-- JSON
-- Windows Event Log
+- Log File
+- Structured JSON (future)
+- Windows Event Log (future)
+
+Log entries SHOULD include:
+
+- Timestamp
+- Severity
+- Module
+- Operation
+- Result
+
+Sensitive information SHALL NEVER be written to log files.
 
 ---
 
 # Error Handling
 
-Public functions should:
+Errors SHALL be handled consistently across the entire project.
+
+Public functions SHOULD:
 
 - use CmdletBinding()
-- use try/catch
-- produce meaningful errors
-- log failures
+- implement structured try/catch blocks
+- return meaningful error information
+- write log entries through the Logging module
 
-Silent failures should be avoided.
+Silent failures SHALL NOT occur.
 
----
+Whenever practical, recoverable errors SHOULD allow continued execution.
 
-# Testing
-
-Testing uses Pester.
-
-Goals:
-
-- deterministic
-- isolated
-- repeatable
-
-Mock Windows APIs whenever possible.
+Critical failures SHALL stop execution in a controlled manner.
 
 ---
 
-# Security
+# Testing Architecture
 
-The project never stores:
+Testing is considered part of the architecture.
 
-- passwords
-- API keys
-- access tokens
-- certificates
+Every module SHOULD support:
 
-Secrets belong in environment variables.
+- Unit Tests
+- Integration Tests
+- Regression Tests
+
+Business logic SHOULD remain independent from user interaction to simplify automated testing.
+
+Whenever practical, Windows-specific functionality SHOULD be mockable.
+
+Testing SHALL follow the requirements defined in Testing.md.
+
+---
+
+# Security Architecture
+
+Security is implemented as a cross-cutting architectural concern.
+
+Every architectural component SHALL consider:
+
+- least privilege
+- input validation
+- rollback capability
+- secure defaults
+- predictable execution
+
+Secrets SHALL NOT be stored inside the repository.
+
+Security implementation details are defined in PowerShellSecurity.md.
+
+---
+
+# AI Architecture Guidance
+
+Artificial Intelligence assistants SHALL preserve the architectural boundaries defined in this document.
+
+AI assistants SHOULD:
+
+- reuse existing Core modules
+- avoid duplicate implementations
+- preserve module responsibilities
+- maintain architectural consistency
+
+AI assistants MUST NOT:
+
+- introduce undocumented top-level modules
+- bypass Core services
+- couple unrelated modules
+- violate the documented execution flow
+
+Architectural consistency SHALL always take precedence over implementation convenience.
+
+---
+
+# Extension Strategy
+
+The architecture is designed for long-term growth.
+
+Future functionality SHOULD be implemented by extending existing layers before introducing new architectural concepts.
+
+Potential future extensions include:
+
+- Plugin support
+- Additional Windows editions
+- Additional deployment profiles
+- Enterprise policy management
+- CI/CD automation
+- Remote administration
+
+Architectural evolution SHOULD remain incremental and backwards compatible whenever practical.
 
 ---
 
 # Long-Term Vision
 
-The toolkit should evolve into a professional Windows privacy management framework.
+The Windows11 Enterprise Privacy Toolkit is intended to evolve into a professional Windows privacy management framework.
 
-Future development will focus on:
+Long-term priorities include:
 
-- telemetry reduction
-- rollback safety
-- enterprise compatibility
+- enterprise-grade maintainability
 - modular architecture
-- automated testing
-- continuous integration
+- deterministic behavior
+- comprehensive rollback support
+- extensive automated testing
+- complete documentation
+- secure-by-default implementation
 
-Architecture should always evolve without sacrificing maintainability.
+Architectural quality SHALL always take precedence over feature quantity.
+
+---
+
+# References
+
+This document SHALL be interpreted together with:
+
+1. PROJECT_RULES.md
+2. CodingStandards.md
+3. PowerShellStyleGuide.md
+4. PowerShellSecurity.md
+5. Development.md
+6. Testing.md
+7. QualityAssurance.md
+8. ModuleGuide.md
+9. ModuleLifecycle.md
+10. DefinitionOfReady.md
+11. DefinitionOfDone.md
+12. ReviewChecklist.md
+13. ReleaseChecklist.md
+14. DecisionLog.md
+15. Glossary.md
+
+Together these documents define the complete engineering framework of the project.
+
+---
+
+# Document Maintenance
+
+This document SHALL evolve together with the architecture.
+
+Changes SHALL:
+
+- improve clarity
+- improve maintainability
+- improve scalability
+- remain consistent with PROJECT_RULES.md
+
+Architectural changes SHOULD be documented before implementation.
+
+Major architectural decisions SHOULD be recorded in DecisionLog.md.
+
+---
+
+# Revision History
+
+| Version | Date | Description |
+|----------|------------|-------------------------------------------|
+| 1.0 | 2026-07-23 | Initial stable architecture document |
+
+---
+
+# Final Statement
+
+The architecture defined in this document establishes the technical foundation of the Windows11 Enterprise Privacy Toolkit.
+
+All implementations SHALL remain consistent with this architecture unless an approved architectural decision explicitly defines otherwise.
+
+Maintaining a stable, modular and well-documented architecture is essential for the long-term success of the project.
+
+---
+
+**End of Document**
