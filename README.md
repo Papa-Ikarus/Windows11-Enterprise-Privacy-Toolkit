@@ -2,7 +2,13 @@
 
 > A modular, enterprise-grade PowerShell toolkit to improve privacy on Windows 11 Enterprise without breaking core Microsoft functionality.
 
-> **Status:** 🚧 Early Development (v0.1.0-alpha)
+## Project Status
+
+The project is currently under active development.
+
+The documentation framework has reached version 1.0 and serves as the engineering foundation for future implementation.
+
+Core Framework implementation is the current primary development focus.
 
 ---
 
@@ -24,6 +30,23 @@ Every change is designed to be:
 - Documented
 - Logged
 - Tested
+
+---
+
+Phase 1
+✓ Documentation
+
+Phase 2
+▶ Core Framework
+
+Phase 3
+Privacy Modules
+
+Phase 4
+Testing
+
+Phase 5
+Release 1.0
 
 ---
 
