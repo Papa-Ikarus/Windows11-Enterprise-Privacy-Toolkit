@@ -1,14 +1,586 @@
 # Windows11 Enterprise Privacy Toolkit
 
-# PROJECT RULES
+# Project Rules
 
 Version: 1.0
 
-Status: Draft
+Status: Stable
 
-Last Updated: 2026-07-20
+Last Updated: 2026-07-22
 
 ---
+
+# Purpose
+
+This document defines the mandatory governance rules for the Windows11 Enterprise Privacy Toolkit.
+
+It serves as the highest-level policy document within the project and establishes the principles that govern architecture, development, documentation, security, testing and long-term maintenance.
+
+All contributors, maintainers, reviewers and AI coding assistants SHALL comply with the requirements defined in this document.
+
+Whenever conflicts arise between project documents, this document SHALL take precedence unless explicitly stated otherwise.
+
+---
+
+# Scope
+
+These rules apply to every part of the repository, including but not limited to:
+
+- PowerShell modules
+- Helper functions
+- Build scripts
+- Test scripts
+- Release scripts
+- Documentation
+- Configuration files
+- Templates
+- Examples
+- GitHub workflows
+- Development tooling
+
+The requirements defined in this document apply equally to:
+
+- Project maintainers
+- Contributors
+- External contributors
+- AI coding assistants
+- Automated code generation tools
+
+---
+
+# RFC 2119 Terminology
+
+The key words **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **SHOULD**, **SHOULD NOT**, **RECOMMENDED**, **MAY**, and **OPTIONAL** in this documentation are to be interpreted as described in RFC 2119.
+
+These keywords define the normative strength of project requirements and SHALL be interpreted consistently across the complete documentation set.
+
+---
+
+# Vision
+
+The Windows11 Enterprise Privacy Toolkit aims to become a professional, modular and maintainable toolkit for improving privacy, reducing telemetry and managing Windows Enterprise installations without sacrificing system stability or maintainability.
+
+The project prioritizes:
+
+- reliability
+- transparency
+- maintainability
+- security
+- reproducibility
+- long-term sustainability
+
+Every design decision SHOULD support these objectives.
+
+---
+
+# Core Principles
+
+The following principles define the foundation of the project.
+
+## Security First
+
+Security SHALL always take precedence over convenience.
+
+Implementations MUST avoid introducing unnecessary risks.
+
+---
+
+## Stability First
+
+System stability SHALL never be sacrificed for additional functionality.
+
+Every system modification SHOULD be predictable and reversible.
+
+---
+
+## Documentation First
+
+Documentation is considered part of the implementation.
+
+Features are not complete until the related documentation has been updated.
+
+---
+
+## Quality Before Speed
+
+Correctness is more important than implementation speed.
+
+Readable and maintainable code is preferred over clever or highly optimized code.
+
+---
+
+## Reproducibility
+
+Project behavior SHOULD remain deterministic whenever practical.
+
+Repeated executions SHOULD produce predictable results.
+
+---
+
+## Transparency
+
+Every system modification SHOULD be understandable by contributors and end users.
+
+Hidden behavior SHOULD be avoided.
+
+---
+
+## Modularity
+
+Every module SHALL have a clearly defined responsibility.
+
+Modules SHOULD remain loosely coupled.
+
+Reusable functionality SHOULD be implemented within shared Core modules.
+
+---
+
+## Least Privilege
+
+Administrative privileges SHALL only be required when technically necessary.
+
+Operations that do not require elevation MUST execute without administrative permissions whenever practical.
+
+---
+
+# Documentation Hierarchy
+
+Project documentation follows the hierarchy below.
+
+Documents with higher priority SHALL take precedence over lower-level documents.
+
+1. PROJECT_RULES.md
+2. Architecture.md
+3. CodingStandards.md
+4. PowerShellStyleGuide.md
+5. PowerShellSecurity.md
+6. Development.md
+7. Testing.md
+8. QualityAssurance.md
+9. Module-specific documentation
+10. Inline documentation
+
+Lower-level documents MUST NOT contradict higher-level requirements.
+
+If conflicts occur, the higher-level document SHALL be considered authoritative.
+
+---
+
+# Project Governance
+
+The project SHALL be developed according to clearly defined engineering principles.
+
+Every contribution SHALL improve or maintain the project's overall quality.
+
+Project decisions SHALL prioritize:
+
+1. Stability
+2. Security
+3. Maintainability
+4. Consistency
+5. Documentation
+6. Testability
+7. Performance
+
+Feature development SHALL never compromise these priorities.
+
+---
+
+# AI Development Governance
+
+Artificial Intelligence is considered a development accelerator, not an autonomous decision maker.
+
+AI coding assistants SHALL:
+
+- read relevant project documentation before generating code
+- comply with PROJECT_RULES.md
+- follow the documented architecture
+- preserve coding consistency
+- respect module boundaries
+- generate maintainable code
+- generate documentation where required
+- generate tests whenever practical
+
+AI assistants MUST NOT:
+
+- invent undocumented architecture
+- bypass project rules
+- ignore higher-level documentation
+- remove documentation
+- introduce unnecessary dependencies
+- rewrite unrelated code
+- weaken security requirements
+- commit changes without human review
+
+Generated code SHALL always be treated as a proposal until reviewed by a human contributor.
+
+---
+
+# Architecture Governance
+
+The project architecture SHALL remain modular.
+
+Every module SHALL have:
+
+- one clearly defined responsibility
+- a documented public interface
+- minimal dependencies
+- predictable behavior
+
+Modules SHOULD communicate only through documented interfaces.
+
+Implementation details SHALL remain encapsulated.
+
+Architectural decisions SHALL prioritize long-term maintainability over short-term convenience.
+
+---
+
+# Coding Governance
+
+Implementation SHALL follow:
+
+- CodingStandards.md
+- PowerShellStyleGuide.md
+
+Every implementation SHALL:
+
+- remain readable
+- remain maintainable
+- remain testable
+- remain consistent
+
+Code duplication SHOULD be minimized.
+
+Reusable functionality SHOULD be centralized within Core modules.
+
+---
+
+# Security Governance
+
+Security requirements are defined by:
+
+PowerShellSecurity.md
+
+Security SHALL never be reduced for convenience.
+
+Every contributor SHALL consider:
+
+- attack surface
+- privilege requirements
+- secure defaults
+- input validation
+- rollback capability
+
+Security-sensitive changes SHOULD receive additional review.
+
+---
+
+# Testing Governance
+
+Testing is mandatory.
+
+Every significant implementation SHOULD include appropriate tests.
+
+Testing SHALL include, where applicable:
+
+- Unit Tests
+- Integration Tests
+- Regression Tests
+- Manual Validation
+
+No implementation SHALL be considered complete without appropriate validation.
+
+---
+
+# Documentation Governance
+
+Documentation SHALL evolve together with the implementation.
+
+Whenever behavior changes:
+
+- documentation SHALL be reviewed
+- examples SHALL be updated
+- references SHALL remain valid
+
+Documentation SHALL accurately reflect implementation.
+
+Outdated documentation SHALL be corrected as soon as practical.
+
+---
+
+# Module Governance
+
+Every module SHALL:
+
+- define a single responsibility
+- document its purpose
+- expose only its public interface
+- minimize dependencies
+- support future maintenance
+
+Internal helper functions SHALL remain private.
+
+Public interfaces SHOULD remain stable whenever practical.
+
+---
+
+# Dependency Governance
+
+External dependencies SHALL be minimized.
+
+Before introducing a dependency, contributors SHALL evaluate:
+
+- maintenance status
+- licensing
+- security
+- compatibility
+- long-term sustainability
+
+Unused dependencies SHALL be removed.
+
+Dependencies SHALL be documented.
+
+---
+
+# Configuration Governance
+
+Configuration SHALL remain separated from implementation.
+
+Hardcoded values SHOULD be avoided whenever practical.
+
+Configuration SHALL be:
+
+- validated
+- documented
+- version controlled
+
+Configuration files MUST NOT contain:
+
+- secrets
+- passwords
+- API keys
+- personal information
+
+---
+
+# Logging Governance
+
+Operational logging SHALL remain consistent throughout the project.
+
+Logging SHOULD provide:
+
+- useful diagnostics
+- troubleshooting information
+- execution history
+
+Logs MUST NOT expose sensitive information.
+
+The logging implementation SHALL remain centralized.
+
+---
+
+# Change Management
+
+Every significant modification SHOULD include:
+
+- implementation
+- documentation
+- testing
+- review
+
+Large changes SHOULD be divided into smaller, reviewable commits.
+
+Every commit SHOULD represent one logical change.
+
+---
+
+# Decision Process
+
+Technical decisions SHOULD follow this order:
+
+1. Identify the problem.
+2. Evaluate alternatives.
+3. Document the preferred solution.
+4. Review potential impact.
+5. Implement the change.
+6. Validate the implementation.
+7. Update documentation.
+
+Major architectural decisions SHOULD be recorded within DecisionLog.md.
+
+---
+
+# Compliance
+
+Compliance with this document is mandatory.
+
+Every contributor SHALL comply with the requirements defined in PROJECT_RULES.md.
+
+Code reviews SHALL verify compliance with:
+
+- Architecture
+- Coding Standards
+- Security
+- Testing
+- Documentation
+
+Non-compliant implementations SHALL be corrected before merge whenever practical.
+
+Repeated violations SHOULD be discussed during project review.
+
+---
+
+# Exceptions
+
+Exceptions to these rules SHALL remain rare.
+
+Any exception SHOULD:
+
+- be technically justified
+- be documented
+- be reviewed
+- minimize long-term impact
+
+Temporary exceptions SHOULD include a plan for future resolution.
+
+Undocumented exceptions SHALL NOT become permanent project behavior.
+
+---
+
+# Contributor Expectations
+
+Every contributor is expected to:
+
+- understand the project architecture
+- follow project documentation
+- write maintainable code
+- improve existing code where appropriate
+- update documentation when required
+- write appropriate tests
+- participate in constructive code reviews
+
+Contributors SHOULD leave the project in a better state than they found it.
+
+---
+
+# Maintainer Responsibilities
+
+Project maintainers SHALL:
+
+- protect project quality
+- review incoming contributions
+- preserve architectural consistency
+- ensure documentation accuracy
+- enforce project rules
+- maintain long-term sustainability
+
+Maintainers MAY reject contributions that do not comply with the project's standards.
+
+---
+
+# Code Review Principles
+
+Every code review SHOULD evaluate:
+
+- correctness
+- readability
+- maintainability
+- security
+- testing
+- documentation
+- consistency with project architecture
+
+Reviews SHOULD focus on improving the implementation rather than personal coding preferences.
+
+Constructive feedback is encouraged.
+
+---
+
+# Continuous Improvement
+
+The project is expected to evolve over time.
+
+Improvements SHOULD focus on:
+
+- code quality
+- documentation
+- testing
+- automation
+- maintainability
+- security
+
+Changes SHOULD preserve backward compatibility whenever practical.
+
+---
+
+# References
+
+The following documents define the complete engineering framework of this project:
+
+1. PROJECT_RULES.md
+2. Docs/Architecture.md
+3. Docs/CodingStandards.md
+4. Docs/PowerShellStyleGuide.md
+5. Docs/PowerShellSecurity.md
+6. Docs/Development.md
+7. Docs/ModuleGuide.md
+8. Docs/ModuleLifecycle.md
+9. Docs/Testing.md
+10. Docs/QualityAssurance.md
+11. Docs/DefinitionOfReady.md
+12. Docs/DefinitionOfDone.md
+13. Docs/ReviewChecklist.md
+14. Docs/ReleaseChecklist.md
+15. Docs/DecisionLog.md
+16. Docs/Glossary.md
+
+Together these documents define the project's engineering standards.
+
+---
+
+# Document Maintenance
+
+This document is the highest-level governance document of the Windows11 Enterprise Privacy Toolkit.
+
+Changes to this document SHALL:
+
+- improve clarity
+- improve consistency
+- improve maintainability
+- preserve project philosophy
+
+Before modifying PROJECT_RULES.md contributors SHOULD evaluate whether the change belongs here or within a lower-level document.
+
+Major revisions SHOULD be reviewed before adoption.
+
+---
+
+# Revision History
+
+| Version | Date | Description |
+|----------|------------|---------------------------------------------|
+| 1.0 | 2026-07-22 | Initial stable project governance document |
+
+---
+
+# Final Statement
+
+PROJECT_RULES.md defines the engineering principles that govern the Windows11 Enterprise Privacy Toolkit.
+
+Every other document within this repository derives its authority from this document and SHALL remain consistent with its requirements.
+
+When uncertainty exists, contributors SHOULD:
+
+1. Follow PROJECT_RULES.md.
+2. Consult the appropriate lower-level documentation.
+3. Choose the solution that best preserves security, maintainability, consistency and long-term project quality.
+4. Document significant decisions where appropriate.
+
+The long-term success of this project depends on disciplined engineering, consistent documentation and collaborative development.
+
+---
+
+**End of Document**
 
 # 1. Purpose
 
