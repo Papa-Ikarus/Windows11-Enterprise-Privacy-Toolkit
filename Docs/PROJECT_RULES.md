@@ -833,6 +833,17 @@ Project quality shall never depend on a single contributor.
 
 ---
 
+## Framework Principles
+
+The engineering philosophy of this project is defined in:
+
+- FrameworkPrinciples.md
+
+Every contributor SHALL comply with these principles before implementing new functionality.
+
+---
+
+
 # 8. Repository Structure
 
 The repository follows a predefined structure.
